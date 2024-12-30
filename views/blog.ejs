@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title><%= blog.title %> - Blog Details</title>
+  </head>
+
+  <body class="bg-gray-100">
+    <%- include('./partials/nav') %>
+
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+      <article class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Cover Image -->
+        <div class="w-full h-96 overflow-hidden">
+          <img
+            src="<%= blog.coverImage %>"
+            alt="<%= blog.title %>"
+            class="w-full h-full object-fit object-center"
+          />
+        </div>
+
+        <!-- Blog Content -->
+        <div class="p-8">
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">
+            <%= blog.title %>
+          </h1>
+
+          <div class="flex items-center gap-4 text-gray-600 text-sm mb-6">
+            <div class="flex items-center gap-2">
+              <img
+                src="<%= blog.createdBy.profileImage %>"
+                alt="<%= blog.createdBy.fullname %>"
+                class="w-8 h-8 rounded-full"
+              />
+              <span> <%= blog.createdBy.fullname %> </span>
+            </div>
+            <span>
+              <i class="far fa-calendar-alt mr-2"></i>
+              <%= new Date(blog.createdAt).toLocaleDateString('en-US', { year:
+              'numeric' , month: 'long' , day: 'numeric' }) %>
+            </span>
+            <span>
+              <i class="far fa-clock mr-2"></i>
+              <%= new Date(blog.updatedAt).toLocaleTimeString() %>
+            </span>
+          </div>
+
+          <div class="prose prose-lg max-w-none text-gray-700">
+            <%- blog.content %>
+          </div>
+        </div>
+      </article>
+
+      <!-- Comments Section -->
+      <section class="mt-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments (<%= comments.length %>)</h2>
+
+        <!-- Comment Form -->
+        <% if (locals.user) { %>
+        <form action="/blog/<%= blog._id %>/comment" method="post" class="mb-8">
+          <div class="mb-4">
+            <textarea
+              name="content"
+              rows="4"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Write your comment..."
+              required
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            Post Comment
+          </button>
+        </form>
+        <% } else { %>
+        <div class="mb-8 p-4 bg-gray-100 rounded-lg text-center">
+          <a href="/user/signin" class="text-blue-600 hover:underline"
+            >Sign in to comment</a
+          >
+        </div>
+        <% } %>
+
+        <!-- Comments List -->
+        <div class="space-y-6">
+          <% if (locals.comments && locals.comments.length> 0) { %> <%
+          comments.forEach(comment=> { %>
+          <div class="border-b border-gray-200 pb-6">
+            <div class="flex items-center mb-2">
+              <img
+                src="<%= comment.createdBy.profileImage %>"
+                alt="<%= comment.createdBy.fullname %>"
+                class="w-10 h-10 rounded-full mr-3"
+              />
+              <div>
+                <h4 class="font-semibold"><%= comment.createdBy.fullname %></h4>
+                <p class="text-sm text-gray-600">
+                  <%= new Date(comment.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric' , month: 'long' , day: 'numeric' }) %>
+                </p>
+              </div>
+            </div>
+            <p class="text-gray-700"><%= comment.content %></p>
+          </div>
+          <% }) %> <% } else { %>
+          <p class="text-center text-gray-600">
+            No comments yet. Be the first to comment!
+          </p>
+          <% } %>
+        </div>
+      </section>
+
+      <!-- Share Buttons -->
+      <div class="mt-8 flex justify-center space-x-4">
+        <button
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          <i class="fab fa-facebook-f mr-2"></i> Share
+        </button>
+        <button
+          class="px-4 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition"
+        >
+          <i class="fab fa-twitter mr-2"></i> Tweet
+        </button>
+        <button
+          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+        >
+          <i class="fab fa-whatsapp mr-2"></i> Share
+        </button>
+      </div>
+    </main>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

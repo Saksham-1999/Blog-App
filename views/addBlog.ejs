@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head') %>
+        <title>Add New Blog</title>
+</head>
+
+<body>
+    <%- include('./partials/nav') %>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="py-8">
+                <h1 class="text-3xl font-bold text-blue-900 mb-8">Create New Blog</h1>
+
+                <form action="/blog" method="post" enctype="multipart/form-data" class="max-w-2xl space-y-6">
+                    <!-- Title Input -->
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700">Blog Title</label>
+                        <input type="text" name="title" id="title" required
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2" />
+                    </div>
+
+                    <!-- Content Input -->
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700">Blog Content</label>
+                        <textarea name="content" id="content" rows="8" required
+                            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"></textarea>
+                    </div>
+
+                    <!-- Cover Image Input -->
+                    <div>
+                        <label for="coverImage" class="block text-sm font-medium text-gray-700">Cover Image</label>
+                        <div class="mt-1 flex items-center">
+                            <input type="file" name="coverImage" id="coverImage" accept="image/*"
+                                class="block w-full text-sm text-blue-900 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button type="submit"
+                            class="inline-flex justify-center rounded-md border border-transparent bg-blue-900 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            Create Blog
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <%- include('./partials/scripts') %>
+</body>
+
+</html>
