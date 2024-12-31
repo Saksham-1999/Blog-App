@@ -58,6 +58,41 @@
         <h3 class="text-xl text-gray-600">No blogs found</h3>
       </div>
       <% } %>
+
+      <!-- Pagination Controls -->
+
+      <% if (locals.user) { %>
+      <div class="mt-8 flex justify-center items-center space-x-4">
+        <% if (hasPrevPage) { %>
+        <a
+          href="/?page=<%= currentPage - 1 %>"
+          class="px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700"
+        >
+          Previous
+        </a>
+        <% } %>
+
+        <span class="text-gray-600">
+          Page <%= currentPage %> of <%= totalPages %>
+        </span>
+
+        <% if (hasNextPage) { %>
+        <a
+          href="/?page=<%= currentPage + 1 %>"
+          class="px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700"
+        >
+          Next
+        </a>
+        <% } %>
+      </div>
+      <% } else { %>
+      <div class="mt-8 flex justify-center items-center space-x-4">
+        <span
+          >If you want to see more blogs, please
+          <a href="/user/signin" class="text-blue-900 underline"> sign in </a></span
+        >
+      </div>
+      <% } %>
     </div>
 
     <%- include('./partials/scripts') %>

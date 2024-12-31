@@ -20,7 +20,7 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(checkForAuthentication("token"));
@@ -29,9 +29,38 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
 app.get("/", async (req, res) => {
-  const allBlogs = await Blog.find({}).populate("createdBy");
-  return res.render("home", { user: req.user, blogs: allBlogs });
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalBlogs = await Blog.countDocuments();
+    const totalPages = Math.ceil(totalBlogs / limit);
+
+    const allBlogs = await Blog.find({})
+      .populate("createdBy")
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    return res.render("home", {
+      user: req.user,
+      blogs: allBlogs,
+      currentPage: page,
+      totalPages,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1,
+    });
+  } catch (error) {
+    console.log("Error fetching blogs:", error);
+    return res.status(500).render("home", {
+      user: req.user,
+      blogs: [],
+      error: "Failed to fetch blogs",
+    });
+  }
 });
+
 app.use("/user", userRoute);
 app.use("/blog", blogRoute);
 
