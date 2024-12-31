@@ -8,7 +8,7 @@
   <body class="bg-gray-100">
     <%- include('./partials/nav') %>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[85vh]">
       <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">
         Latest Blog Posts
       </h1>
@@ -61,7 +61,7 @@
 
       <!-- Pagination Controls -->
 
-      <% if (locals.user && locals.totalItems> 9) { %> <!-- If user is signed in and totalItems is greater than 9 -->
+      <% if (locals.user) { %>
       <div class="mt-8 flex justify-between items-center">
         <span class="text-gray-600">
           Showing <%= (currentPage - 1) * 9 + 1 %>-<%= Math.min(currentPage * 9,
