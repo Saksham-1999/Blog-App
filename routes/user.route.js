@@ -11,6 +11,14 @@ router.get("/signup", (req, res) => {
   return res.render("signup");
 });
 
+router.get("/profile", (req, res) => {
+  return res.render("profile", { user: req.user });
+});
+
+router.get("/profile/edit", (req, res) => {
+  return res.render("editProfile", { user: req.user });
+});
+
 router.post("/signup", async (req, res) => {
   const { fullname, email, password } = req.body;
 

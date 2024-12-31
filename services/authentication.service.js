@@ -12,6 +12,9 @@ function createTokenForUser(user) {
     id: user._id, // MongoDB `_id` field
     email: user.email,
     profileImage: user.profileImage,
+    fullname: user.fullname,
+    role: user.role,
+    bio: user.bio,
   };
 
   const token = JWT.sign(payload, secret, { expiresIn: "10h" });

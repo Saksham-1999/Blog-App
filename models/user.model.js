@@ -31,6 +31,10 @@ const userSchema = new Schema(
       enum: ["USER", "ADMIN"],
       default: "USER",
     },
+    bio: {
+      type: String,
+      default: "Hello, I'm using Social App!",
+    },
   },
   {
     timestamps: true,
@@ -52,21 +56,25 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-userSchema.static("matchPasswordAndGenerateToken", async function (email, password) {
-  const user = await this.findOne({ email });
-  if (!user) throw new Error("User not found");
-  const salt = user.salt;
-  const hashedPassword = user.password;
+userSchema.static(
+  "matchPasswordAndGenerateToken",
+  async function (email, password) {
+    const user = await this.findOne({ email });
+    if (!user) throw new Error("User not found");
+    const salt = user.salt;
+    const hashedPassword = user.password;
 
-  const userPassword = createHmac("sha256", salt)
-    .update(password)
-    .digest("hex");
+    const userPassword = createHmac("sha256", salt)
+      .update(password)
+      .digest("hex");
 
-  if (userPassword !== hashedPassword) throw new Error("Password is incorrect");
+    if (userPassword !== hashedPassword)
+      throw new Error("Password is incorrect");
 
-  const  token = createTokenForUser(user);
-  return token;
-});
+    const token = createTokenForUser(user);
+    return token;
+  }
+);
 
 const User = model("user", userSchema);
 
