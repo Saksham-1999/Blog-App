@@ -8,7 +8,7 @@ const Comment = require("../models/comment.model");
 const router = express.Router();
 
 // Create uploads directory if it doesn't exist
-const uploadDir = path.resolve(`./public/uploads`);
+const uploadDir = path.resolve(`./public/uploads/blogs`);
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -45,7 +45,7 @@ router.post("/", upload.single("coverImage"), async (req, res) => {
       title,
       content,
       createdBy: req.user.id, // Reference the logged-in user
-      coverImage: req.file ? `/uploads/${req.file.filename}` : null,
+      coverImage: req.file ? `/uploads/blogs/${req.file.filename}` : null,
     });
 
     return res.redirect(`/`);
