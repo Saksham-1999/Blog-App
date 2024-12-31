@@ -26,19 +26,22 @@
 
       <div class="flex items-center space-x-4">
         <div class="relative">
-          <input type="search"
-            class="w-64 px-4 py-2 rounded-lg bg-white/10 text-white placeholder-white/75 focus:outline-none focus:ring-2 focus:ring-white/50"
-            placeholder="Search posts..." />
-          <button class="absolute right-2 top-2.5 text-white">
-            <i class="fas fa-search"></i>
-          </button>
+          <form action="/" method="GET" class="relative">
+            <input type="search" name="search"
+              class="w-64 px-4 py-2 rounded-lg bg-white/10 text-white placeholder-white/75 focus:outline-none focus:ring-2 focus:ring-white/50"
+              placeholder="Search posts..." />
+            <button type="submit" class="absolute right-2 top-2.5 text-white">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
         </div>
 
         <% if (locals.user) { %>
           <div class="dropdown">
             <button class="btn dropdown-toggle border-0 flex items-center gap-2 hover:bg-white/10 bg-white/10"
               type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="<%= locals.user.profileImage %>" alt="<%= locals.user.fullname %>" class="w-8 h-8 rounded-full" />
+              <img src="<%= locals.user.profileImage %>" alt="<%= locals.user.fullname %>"
+                class="w-8 h-8 rounded-full" />
               <%= locals.user.fullname %>
             </button>
             <ul class="dropdown-menu">

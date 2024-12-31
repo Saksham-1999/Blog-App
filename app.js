@@ -33,11 +33,23 @@ app.get("/", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    const searchQuery = req.query.search;
 
-    const totalBlogs = await Blog.countDocuments();
+    // Build search query
+    let query = {};
+    if (searchQuery) {
+      query = {
+        $or: [
+          { title: { $regex: searchQuery, $options: "i" } },
+          { content: { $regex: searchQuery, $options: "i" } },
+        ],
+      };
+    }
+
+    const totalBlogs = await Blog.countDocuments(query);
     const totalPages = Math.ceil(totalBlogs / limit);
 
-    const allBlogs = await Blog.find({})
+    const allBlogs = await Blog.find(query)
       .populate("createdBy")
       .skip(skip)
       .limit(limit)
@@ -50,6 +62,7 @@ app.get("/", async (req, res) => {
       totalPages,
       hasNextPage: page < totalPages,
       hasPrevPage: page > 1,
+      searchQuery
     });
   } catch (error) {
     console.log("Error fetching blogs:", error);
