@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <%- include('./partials/head') %>
+  <head>
+    <%- include('./partials/head') %>
     <title>Home</title>
-</head>
+  </head>
 
-<body class="bg-gray-100">
-  <%- include('./partials/nav') %>
+  <body class="bg-gray-100">
+    <%- include('./partials/nav') %>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">
@@ -16,77 +15,103 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <% blogs.forEach(blog=> { %>
-          <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-            <% if (blog.coverImage) { %>
-              <img src="<%= blog.coverImage %>" alt="<%= blog.title %>" class="w-full h-48 object-fit object-center" />
-              <% } else { %>
-                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                  <span class="text-gray-400">No Image Available</span>
-                </div>
-                <% } %>
-
-                  <div class="p-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
-                      <%= blog.title %>
-                    </h2>
-
-                    <p class="text-gray-600 mb-4 line-clamp-3">
-                      <%= blog.content %>
-                    </p>
-
-                    <div class="flex items-center justify-between">
-                      <span class="text-sm text-gray-500">
-                        <%= new Date(blog.createdAt).toLocaleDateString() %>
-                      </span>
-                      <a href="/blog/<%= blog._id %>"
-                        class="inline-flex items-center px-4 py-2 bg-blue-900 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-300">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
+        <div
+          class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+        >
+          <% if (blog.coverImage) { %>
+          <img
+            src="<%= blog.coverImage %>"
+            alt="<%= blog.title %>"
+            class="w-full h-48 object-fit object-center"
+          />
+          <% } else { %>
+          <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+            <span class="text-gray-400">No Image Available</span>
           </div>
-          <% }) %>
+          <% } %>
+
+          <div class="p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
+              <%= blog.title %>
+            </h2>
+
+            <p class="text-gray-600 mb-4 line-clamp-3"><%= blog.content %></p>
+
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-500">
+                <%= new Date(blog.createdAt).toLocaleDateString() %>
+              </span>
+              <a
+                href="/blog/<%= blog._id %>"
+                class="inline-flex items-center px-4 py-2 bg-blue-900 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-300"
+              >
+                Read More
+              </a>
+            </div>
+          </div>
+        </div>
+        <% }) %>
       </div>
 
       <% if (blogs.length===0) { %>
-        <div class="text-center py-12">
-          <h3 class="text-xl text-gray-600">No blogs found</h3>
+      <div class="text-center py-12">
+        <h3 class="text-xl text-gray-600">No blogs found</h3>
+      </div>
+      <% } %>
+
+      <!-- Pagination Controls -->
+
+      <% if (locals.user && locals.totalItems> 9) { %> <!-- If user is signed in and totalItems is greater than 9 -->
+      <div class="mt-8 flex justify-between items-center">
+        <span class="text-gray-600">
+          Showing <%= (currentPage - 1) * 9 + 1 %>-<%= Math.min(currentPage * 9,
+          totalItems) %> of <%= totalItems %>
+        </span>
+
+        <div class="flex items-center gap-2">
+          <% if (hasPrevPage) { %>
+          <a
+            href="/?page=<%= currentPage - 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>"
+            class="px-2 py-1 bg-blue-900 text-white rounded-md hover:bg-blue-700 active:bg-blue-950 transition-colors duration-300"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+          <% } else { %>
+          <button
+            disabled
+            class="px-2 py-1 bg-gray-400 text-white rounded-md cursor-not-allowed opacity-50"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <% } %> <% if (hasNextPage) { %>
+          <a
+            href="/?page=<%= currentPage + 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>"
+            class="px-2 py-1 bg-blue-900 text-white rounded-md hover:bg-blue-700 active:bg-blue-950 transition-colors duration-300"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <% } else { %>
+          <button
+            disabled
+            class="px-2 py-1 bg-gray-400 text-white rounded-md cursor-not-allowed opacity-50"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <% } %>
         </div>
-        <% } %>
-
-          <!-- Pagination Controls -->
-
-          <% if (locals.user) { %>
-            <div class="mt-8 flex justify-center items-center space-x-4">
-              <% if (hasPrevPage) { %>
-                <a href="/?page=<%= currentPage - 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>"
-                  class="px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700">
-                  Previous
-                </a>
-                <% } %>
-
-                  <span class="text-gray-600">
-                    Page <%= currentPage %> of <%= totalPages %>
-                  </span>
-
-                  <% if (hasNextPage) { %>
-                    <a href="/?page=<%= currentPage + 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>"
-                      class="px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700">
-                      Next
-                    </a>
-                    <% } %>
-            </div>
-            <% } else { %>
-              <div class="mt-8 flex justify-center items-center space-x-4">
-                <span>If you want to see more blogs, please
-                  <a href="/user/signin" class="text-blue-900 underline">
-                    sign in
-                  </a></span>
-              </div>
-              <% } %>
+      </div>
+      <% } else { %>
+      <div class="mt-8 flex justify-center items-center space-x-4">
+        <span
+          >If you want to see more blogs, please
+          <a href="/user/signin" class="text-blue-900 underline">
+            sign in
+          </a></span
+        >
+      </div>
+      <% } %>
     </div>
 
-    <%- include('./partials/scripts') %>
-</body>
-
+    <%- include('./partials/footer') %> <%- include('./partials/scripts') %>
+  </body>
 </html>

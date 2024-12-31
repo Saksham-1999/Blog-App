@@ -46,7 +46,9 @@
           </div>
 
           <div class="prose prose-lg max-w-none text-gray-700">
-            <pre class="whitespace-pre-wrap"><%- blog.content %></pre>
+            <pre class="whitespace-pre-wrap">
+              <%- blog.content %>
+            </pre>
           </div>
         </div>
       </article>
@@ -131,6 +133,7 @@
       </div>
     </main>
 
+    <%- include('./partials/footer') %>
     <%- include('./partials/scripts') %>
   </body>
 </html>

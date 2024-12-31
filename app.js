@@ -31,7 +31,7 @@ app.set("views", path.resolve("./views"));
 app.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 9;
     const skip = (page - 1) * limit;
     const searchQuery = req.query.search;
 
@@ -62,7 +62,8 @@ app.get("/", async (req, res) => {
       totalPages,
       hasNextPage: page < totalPages,
       hasPrevPage: page > 1,
-      searchQuery
+      searchQuery,
+      totalItems: totalBlogs
     });
   } catch (error) {
     console.log("Error fetching blogs:", error);
